@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración | Inventario</title>
+    <link rel="stylesheet" href="style2.css">
+    <!-- Librería Chart.js para el gráfico de disponibilidad -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+   
+    <header class="admin-header">
+        
+        <div class="logo-container">
+            <span class="live-indicator"><span class="dot-pulsing"></span> Sistema en vivo</span>
+        </div>
+
+        
+        <nav class="admin-nav-links">
+            <a href="admin-panel.html" class="btn-nav-item active">Dashboard</a>
+            <button class="btn-nav-item" onclick="abrirSeccion('inventario')">Inventario</button>
+            <button class="btn-nav-item" onclick="abrirSeccion('incidencias')">Incidencias</button>
+
+            <div class="dropdown-container">
+                <button class="btn-nav-item">Reportes ▾</button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item"> Descargar Reporte diario (PDF)</a>
+                    <a href="#" class="dropdown-item"> Exportar a Excel (.xlsx)</a>
+                    <a href="#" class="dropdown-item"> Historial completo de préstamos</a>
+                </div>
+            </div>
+        </nav>
+
+        
+        <div class="user-info">
+            <span class="badge-role">Administrador</span>
+            <button id="btnLogout" class="btn-logout">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    
+    <main class="dashboard-container">
+        
+        
+        <section class="banner-container">
+            <div class="banner-overlay"></div>
+            <img src="imagenes/antena2.png" class="dashboard-img" alt="Centro de operaciones">
+
+            
+            <div class="banner-content">
+                <span class="welcome-tag">SISTEMA ACTIVO</span>
+                <h1>Bienvenido de nuevo, <span class="highlight" id="userNameBanner"></span></h1>
+                <div class="banner-clock" id="liveClock">--:--:-- --</div>
+            </div>
+        </section>
+
+        
+        <section class="kpi-grid">
+            <div class="kpi-card alert">
+                <div class="kpi-icon">⏳</div>
+                <div class="kpi-data">
+                    <h3 id="kpiPendientes">0</h3>
+                    <p>Reservas Pendientes</p>
+                </div>
+            </div>
+            <div class="kpi-card active">
+                <div class="kpi-icon">🔄</div>
+                <div class="kpi-data">
+                    <h3 id="kpiEnUso">0</h3>
+                    <p>Equipos en Uso</p>
+                </div>
+            </div>
+            <div class="kpi-card success">
+                <div class="kpi-icon">📦</div>
+                <div class="kpi-data">
+                    <h3 id="kpiDisponibles">0</h3>
+                    <p>Equipos Disponibles</p>
+                </div>
+            </div>
+            <div class="kpi-card info">
+                <div class="kpi-icon">👥</div>
+                <div class="kpi-data">
+                    <h3 id="kpiCola">0</h3>
+                    <p>En Cola de Espera</p>
+                </div>
+            </div>
+        </section>
+
+        
+        <div class="search-bar-container">
+            <input type="text" id="inputSearch" placeholder="🔍 Buscar por estudiante, equipo o código de reserva..." class="search-input">
+            <div class="filter-container">
+                <button class="chip-filter active" onclick="filtrarPorCategoria('todos', this)">Todos</button>
+                <button class="chip-filter" onclick="filtrarPorCategoria('retrasos', this)">Solo Retrasos</button>
+                <button class="chip-filter" onclick="filtrarPorCategoria('activos', this)">En Uso</button>
+                <button class="chip-filter" onclick="filtrarPorCategoria('pendientes', this)">Pendientes</button>
+            </div>
+        </div>
+
+        
+        <section class="admin-main-grid">
+            
+            
+            <div class="panels-col">
+                
+               
+                <div class="panel-card col-reservas">
+                    <div class="panel-header">
+                        <h3>Solicitudes de Reserva</h3>
+                        <button id="btnRefreshReservas" class="btn-secondary-sm">🔄 Actualizar</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Equipo</th>
+                                    <th>Fecha Solicitud</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaSolicitudes">
+                                <tr>
+                                    <td colspan="4" class="text-center">Cargando solicitudes...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+               
+                <div class="panel-card chart-card">
+                    <div class="panel-header">
+                        <h3> Estado General del Inventario</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="inventoryChart"></canvas>
+                    </div>
+                </div>
+
+            </div> 
+
+           
+            <div class="side-panels-container">
+                
+                
+                <div class="panels-col">
+
+                    
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <h3>Equipos Activos (En Uso)</h3>
+                        </div>
+                        <div class="cards-list" id="listaActivos">
+                            <p class="text-center">Cargando equipos activos...</p>
+                        </div>
+                    </div>
+                
+                    
+                    <div class="panel-card panel-danger" id="panelRetrasos">
+                        <div class="panel-header">
+                            <h3>Devoluciones Retrasadas (<span id="countRetrasos">0</span>)</h3>
+                        </div>
+                        <div class="cards-list" id="listaRetrasos">
+                            <p class="text-center">Sin devoluciones retrasadas por el momento.</p>
+                        </div>
+                    </div>
+
+                </div> 
+
+                
+                <div class="panels-col">
+                    
+                   
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <h3>⏳ Cola de Espera</h3>
+                        </div>
+                        <div class="cards-list" id="listaCola">
+                            <p class="text-center">Cargando cola de espera...</p>
+                        </div>
+                    </div>
+
+                    
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <h3>Bitácora de Check-Out</h3>
+                        </div>
+                        <div class="cards-list" id="listaCheckOut">
+                            <p class="text-center">No hay devoluciones registradas hoy.</p>
+                        </div>
+                    </div>
+
+                </div> 
+
+            </div> 
+
+        </section> 
+
+    </main>
+
+    
+    <script>
+        let inventoryChartInstance = null;
+
+        // 1. ANIMACIÓN DE MÁQUINA DE ESCRIBIR
+        function animarTextoBienvenida(nombreUsuario = "Admin") {
+            const contenedor = document.querySelector('.banner-content h1');
+            if (!contenedor) return;
+
+            const textoCompleto = `Bienvenido de nuevo, `;
+            contenedor.innerHTML = `<span id="typewriterText"></span><span class="typing-cursor"></span>`;
+            
+            const spanText = document.getElementById('typewriterText');
+            const cursor = document.querySelector('.typing-cursor');
+            
+            let index = 0;
+            const cadenaTotal = `${textoCompleto}${nombreUsuario}`;
+
+            function escribirLetra() {
+                if (index < cadenaTotal.length) {
+                    if (index >= textoCompleto.length) {
+                        const parteNombre = cadenaTotal.substring(textoCompleto.length, index + 1);
+                        spanText.innerHTML = `${textoCompleto}<span class="highlight">${parteNombre}</span>`;
+                    } else {
+                        spanText.textContent = cadenaTotal.substring(0, index + 1);
+                    }
+                    index++;
+                    setTimeout(escribirLetra, 60);
+                } else {
+                    setTimeout(() => {
+                        if (cursor) cursor.style.display = 'none';
+                    }, 1500);
+                }
+            }
+
+            escribirLetra();
+        }
+
+        // 2. RELOJ EN TIEMPO REAL
+        function updateClock() {
+            const now = new Date();
+            const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            const dateOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+            
+            const timeStr = now.toLocaleTimeString('en-US', timeOptions);
+            const dateStr = now.toLocaleDateString('es-ES', dateOptions);
+            
+            const clockElement = document.getElementById('liveClock');
+            if(clockElement) {
+                clockElement.textContent = `${timeStr} — ${dateStr}`;
+            }
+        }
+
+        // 3. INICIALIZACIÓN DEL GRÁFICO (Incluye la opción "Sin uso" en gris para el estado actual)
+        function initInventoryChart() {
+            const ctx = document.getElementById('inventoryChart');
+            if (!ctx) return;
+
+            inventoryChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Disponibles', 'En Uso', 'En Retraso / Novedad', 'Sin uso'],
+                    datasets: [{
+                        data: [0, 0, 0, 100], // Actualmente 100% en 'Sin uso'
+                        backgroundColor: [
+                            '#00f2fe', // Cian Neón (Disponibles)
+                            '#7b2cbf', // Morado (En Uso)
+                            '#f87171', // Rojo (En Retraso)
+                            '#64748b'  // Gris (Sin Uso)
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#cbd5e1',
+                                padding: 12,
+                                font: { size: 12, family: 'system-ui' }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const value = context.raw;
+                                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                    return ` ${context.label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '68%'
+                }
+            });
+        }
+
+        // 4. FUNCIÓN PARA ACTUALIZAR CON DATOS REALES
+        function actualizarGraficoInventario(disponibles = 0, enUso = 0, retrasos = 0) {
+            if (!inventoryChartInstance) return;
+
+            const total = disponibles + enUso + retrasos;
+
+            if (total === 0) {
+                inventoryChartInstance.data.datasets[0].data = [0, 0, 0, 100];
+            } else {
+                inventoryChartInstance.data.datasets[0].data = [disponibles, enUso, retrasos, 0];
+            }
+
+            inventoryChartInstance.update();
+        }
+
+        // 5. EJECUCIÓN AL CARGAR EL DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
+            const nombreAdmin = usuarioGuardado ? (usuarioGuardado.nombre || usuarioGuardado.nombre_usuario) : "Admin";
+
+            animarTextoBienvenida(nombreAdmin);
+            
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            initInventoryChart();
+        });
+    </script>
+
+    
+    <script src="admin-panel.js"></script>
+</body>
+</html>

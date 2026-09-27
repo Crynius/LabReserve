@@ -1,0 +1,520 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0b0f19;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.12) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: #f8fafc;
+    min-height: 100vh;
+    padding: 0;
+}
+
+/* Contenedor principal que da margen al contenido debajo del header */
+.dashboard-container {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.8rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #00f2fe;
+    border: 1px solid rgba(0, 242, 254, 0.4);
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    background: rgba(0, 242, 254, 0.08);
+}
+
+.dot-pulsing {
+    width: 8px;
+    height: 8px;
+    background-color: #00f2fe;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #00f2fe;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.7; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+.admin-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-nav-item {
+    text-decoration: none;
+    color: #cbd5e1;
+    padding: 0.5rem 1.1rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.2s ease;
+}
+
+.btn-nav-item:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-nav-item.active {
+    color: #0f172a;
+    background: #00f2fe;
+    border-color: #00f2fe;
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.badge-role {
+    padding: 0.35rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.btn-logout {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    padding: 0.45rem 0.9rem;
+    font-size: 0.82rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-logout:hover {
+    background: rgba(239, 68, 68, 0.3);
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   GRID PRINCIPAL Y TARJETAS (PANEL)
+   ========================================================================== */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.panels-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-width: 0;
+}
+
+.panel-card,
+.card-catalog {
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+    overflow: hidden;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+.panel-header h3 {
+    font-size: 1.05rem;
+    word-break: break-word;
+}
+
+.panel-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ==========================================================================
+   CONTROLES Y SELECTORES
+   ========================================================================== */
+.form-group {
+    margin-bottom: 1.2rem;
+    flex-shrink: 0;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #00f2fe;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.search-input, 
+select {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    border-radius: 6px;
+    color: #f8fafc;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input:focus, 
+select:focus {
+    border-color: #00f2fe;
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
+}
+
+/* ==========================================================================
+   CONTENEDOR DEL CATÁLOGO DE EQUIPOS CON SCROLLBAR
+   ========================================================================== */
+#catalogContainer {
+    flex: 1 1 auto;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Personalización del Scrollbar */
+#catalogContainer::-webkit-scrollbar,
+#cartList::-webkit-scrollbar,
+#listaMisReservas::-webkit-scrollbar {
+    width: 6px;
+}
+
+#catalogContainer::-webkit-scrollbar-track,
+#cartList::-webkit-scrollbar-track,
+#listaMisReservas::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 4px;
+}
+
+#catalogContainer::-webkit-scrollbar-thumb,
+#cartList::-webkit-scrollbar-thumb,
+#listaMisReservas::-webkit-scrollbar-thumb {
+    background: rgba(0, 242, 254, 0.4);
+    border-radius: 4px;
+}
+
+#catalogContainer::-webkit-scrollbar-thumb:hover,
+#cartList::-webkit-scrollbar-thumb:hover,
+#listaMisReservas::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 242, 254, 0.7);
+}
+
+/* ==========================================================================
+   ITEMS DE EQUIPO Y BLOQUES DEL CATÁLOGO
+   ========================================================================== */
+.category-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-bottom: 1.5rem;
+}
+
+.category-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #00f2fe;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.equipment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(30, 41, 59, 0.6);
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.equipment-item:hover {
+    border-color: rgba(0, 242, 254, 0.35);
+    transform: translateY(-2px);
+}
+
+.equipment-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.actions-container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* ==========================================================================
+   BOTONES
+   ========================================================================== */
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-direct-reserve {
+    background: #00f2fe;
+    color: #0f172a;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.8rem;
+}
+
+.btn-direct-reserve:hover {
+    background: #38ef7d;
+    box-shadow: 0 0 10px rgba(56, 239, 125, 0.4);
+}
+
+.btn-add-cart {
+    background: #10b981;
+    color: #ffffff;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.8rem;
+}
+
+.btn-add-cart:hover {
+    background: #059669;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.btn-add-queue {
+    background: #f59e0b;
+    color: #0f172a;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.8rem;
+}
+
+.btn-add-queue:hover {
+    background: #d97706;
+}
+
+.btn-secondary-sm {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+    padding: 0.35rem 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.75rem;
+}
+
+.btn-secondary-sm:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================================
+   MIS RESERVAS Y CONTENEDOR DEL CARRITO
+   ========================================================================== */
+#cartList,
+#listaMisReservas {
+    max-height: 350px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-right: 0.3rem;
+}
+
+.card-item {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 0.8rem;
+}
+
+/* Estructura específica para las tarjetas dentro del Carrito */
+.cart-item-card {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.85rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.cart-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.5rem;
+}
+
+.cart-item-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Anulación del width: 100% global únicamente dentro del selector de tiempo del carrito */
+.cart-item-body select {
+    width: auto !important;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.82rem;
+    background: #0f172a;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   UTILIDADES Y ANIMACIONES
+   ========================================================================== */
+.text-center {
+    text-align: center;
+}
+
+.highlight {
+    color: #00f2fe;
+}
+
+.typing-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.1em;
+    background-color: #00f2fe;
+    vertical-align: middle;
+    margin-left: 2px;
+    animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (ADAPTACIÓN RESPONSIVA)
+   ========================================================================== */
+@media (max-width: 992px) {
+    .dashboard-container {
+        padding: 0 0.75rem 0.75rem 0.75rem;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .admin-nav-links,
+    .user-info {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .panel-card {
+        padding: 1rem;
+    }
+
+    .equipment-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .actions-container {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .btn-nav-item {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Fix: evitar que la altura fija de style2.css recorte el contenido del carrito y del catálogo */
+.panel-card {
+    height: auto;
+    min-height: 0;
+}
+

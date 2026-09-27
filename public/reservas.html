@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Equipos | Estudiantes</title>
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="reservas.css">
+</head>
+<body>
+
+    <!-- Header / Navbar Principal -->
+    <header class="admin-header">
+        <div class="logo-container">
+            <span class="live-indicator"><span class="dot-pulsing"></span> Portal Estudiantil</span>
+        </div>
+
+        <nav class="admin-nav-links">
+            <a href="reservas.html" class="btn-nav-item active">Solicitar Equipo</a>
+            <a href="#mis-reservas" class="btn-nav-item">Mis Préstamos</a>
+        </nav>
+
+        <div class="user-info">
+            <span class="badge-role" style="background: rgba(0, 242, 254, 0.2); color: #00f2fe; border: 1px solid #00f2fe;">Estudiante</span>
+            <button id="btnLogout" class="btn-logout">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <!-- Contenedor Principal -->
+    <main class="dashboard-container">
+        
+        <!-- Banner Tecnológico Superior -->
+        <section class="banner-container">
+            <div class="banner-overlay"></div>
+            <img src="imagenes/antena2.png" class="dashboard-img" alt="Centro de operaciones">
+
+            <div class="banner-content">
+                <span class="welcome-tag">SISTEMA DE PRÉSTAMOS Y RESERVAS</span>
+                <h1>Bienvenido, <span class="highlight" id="userNameBanner">Estudiante</span></h1>
+                <div class="banner-clock" id="liveClock">--:--:-- --</div>
+            </div>
+        </section>
+
+        <!-- Grid Principal Responsivo -->
+        <section class="dashboard-grid">
+            
+            <!-- COLUMNA IZQUIERDA: Selección de Categoría, Lista de Equipos y Carrito -->
+            <div class="panels-col">
+                
+                <!-- Catálogo Filtrable por Tipo / Categoría -->
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <h3>🔬 Selección de Equipos por Categoría</h3>
+                        <button id="btnReloadCatalog" class="btn-secondary-sm">🔄 Actualizar</button>
+                    </div>
+
+                    <!-- Filtro previo por tipo de equipo -->
+                    <div style="margin-top: 1rem;" class="form-group">
+                        <label style="color: #00f2fe; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; display: block;">
+                            1. Seleccione el Tipo / Categoría de Equipo:
+                        </label>
+                        <select id="selectCategoriaFilter" class="search-input" style="width: 100%; background: #0f172a; color: #fff; padding: 0.6rem; border: 1px solid rgba(0, 242, 254, 0.4);">
+                            <option value="">-- Seleccionar Categoría --</option>
+                        </select>
+                    </div>
+
+                    <!-- Resultados de equipos disponibles -->
+                    <div id="catalogContainer" style="margin-top: 1rem;">
+                        <p class="text-center" style="color: #94a3b8;">Por favor seleccione una categoría para desplegar los equipos disponibles.</p>
+                    </div>
+                </div>
+
+                <!-- Carrito de Reservas -->
+                <div class="panel-card" style="border: 1px solid rgba(0, 242, 254, 0.4);">
+                    <div class="panel-header">
+                        <h3>🛒 Equipos Seleccionados (Carrito)</h3>
+                        <span id="cartCountBadge" class="badge" style="background: #00f2fe; color: #0f172a; font-weight: bold;">0 Ítems</span>
+                    </div>
+
+                    <div id="cartList" style="margin-top: 1rem;">
+                        <p style="color: #94a3b8; font-size: 0.9rem;" class="text-center">No has agregado equipos a tu solicitud.</p>
+                    </div>
+
+                    <div id="cartGlobalControls" style="display: none; margin-top: 1.2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+                        <div class="form-group" style="margin-bottom: 0.8rem;">
+                            <label style="color: #cbd5e1; font-size: 0.85rem; font-weight: 600;">Laboratorio / Aula de Destino *</label>
+                            <select id="cartGlobalLab" class="search-input" style="width: 100%; background: #0f172a; color: #fff;">
+                                <option value="Lab. Telecomunicaciones">Lab. Telecomunicaciones</option>
+                                <option value="Lab. Redes y FO">Lab. Redes y Fibra Óptica</option>
+                                <option value="Lab. Electrónica">Lab. Electrónica Análoga/Digital</option>
+                                <option value="Lab. Antenas y RF">Lab. Antenas y Radiofrecuencia</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0.8rem;">
+                            <label style="color: #cbd5e1; font-size: 0.85rem; font-weight: 600;">Asignatura / Motivo de Préstamo</label>
+                            <input type="text" id="cartGlobalObs" placeholder="Ej: Laboratorio #3 RF" class="search-input" style="width: 100%;">
+                        </div>
+
+                        <button id="btnSubmitCart" class="btn-action approve" style="width: 100%; padding: 0.8rem; font-size: 0.95rem; border: none; cursor: pointer;">
+                             Confirmar y Reservar Todo el Carrito
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- COLUMNA DERECHA: Mis Reservas Activas -->
+            <div class="panels-col" id="mis-reservas">
+                <div class="panel-card">
+                    <div class="panel-header">
+                        <h3> Mis Reservas y Devoluciones</h3>
+                        <button id="btnRefreshMisReservas" class="btn-secondary-sm">🔄 Actualizar</button>
+                    </div>
+                    <div class="cards-list" id="listaMisReservas">
+                        <p class="text-center">Cargando tus solicitudes...</p>
+                    </div>
+                </div>
+
+                <div class="panel-card" style="background: rgba(15, 23, 42, 0.6); border: 1px dashed rgba(255, 255, 255, 0.15); min-height: auto;">
+                    <div class="panel-header">
+                        <h3 style="font-size: 0.95rem; color: #94a3b8;">📌 Instrucciones de Devolución</h3>
+                    </div>
+                    <ul style="color: #94a3b8; font-size: 0.85rem; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                        <li>Al terminar su práctica, haga clic en el botón <strong>"Devolver Equipo"</strong>.</li>
+                        <li>El administrador del laboratorio inspeccionará el equipo y confirmará la recepción en el sistema.</li>
+                        <li>Recuerde devolver los cables y accesorios en buen estado.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="reservas.js"></script>
+</body>
+</html>

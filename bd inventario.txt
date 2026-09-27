@@ -1,0 +1,192 @@
+CREATE TABLE equipos(
+    ID_equipo NUMBER PRIMARY KEY,
+    ID_tipo_equipo NUMBER NOT NULL,
+    ID_laboratorio NUMBER NOT NULL,
+    nombre_equipo VARCHAR2(50) not null,
+    marca VARCHAR2 (50) not null,
+    modelo VARCHAR2(50)not null,
+    estado VARCHAR2(60)not null,
+    descripcion VARCHAR2(80)not null,
+    numero_inventario NUMBER NOT NULL,
+
+    constraint fk_tipo_equipo FOREIGN KEY(ID_tipo_equipo)references tipo_equipo (ID_tipo_equipo),
+    constraint fk_laboratorio FOREIGN KEY(ID_laboratorio)references laboratorios(ID_laboratorio)
+
+);
+
+CREATE TABLE reservas(
+    ID_reserva NUMBER PRIMARY KEY,
+    ID_usuario NUMBER NOT NULL,
+    ID_equipo NUMBER NOT NULL,
+    hora_inicio TIMESTAMP NOT NULL,
+    hora_fin TIMESTAMP NOT NULL,
+    estado VARCHAR2(30) NOT NULL,
+    fecha_creacion DATE DEFAULT SYSDATE,
+
+    CONSTRAINT fk_reserva_usuario
+        FOREIGN KEY (ID_usuario)
+        REFERENCES usuarios(ID_usuario),
+
+    CONSTRAINT fk_reserva_equipo
+        FOREIGN KEY (ID_equipo)
+        REFERENCES equipos(ID_equipo)
+);
+CREATE TABLE uso_equipos(
+    ID_uso NUMBER PRIMARY KEY,
+    ID_reserva NUMBER NOT NULL,
+    hora_recogida TIMESTAMP,
+    hora_devolucion TIMESTAMP,
+    estado_uso VARCHAR2(30),
+);
+ 
+CREATE TABLE usuarios (
+    ID_usuario SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    correo VARCHAR(100) NOT NULL,
+    password_usuario VARCHAR(100) NOT NULL,
+    rol VARCHAR(30) NOT NULL,
+    fecha_registro DATE DEFAULT CURRENT_DATE
+);
+CREATE TABLE tipo_equipo (
+    ID_tipo_equipo SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(150) NOT NULL
+);
+CREATE TABLE laboratorios (
+    ID_laboratorio SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    ubicacion VARCHAR(100) NOT NULL
+);
+CREATE TABLE equipos (
+    ID_equipo SERIAL PRIMARY KEY,
+    ID_tipo_equipo INT NOT NULL,
+    nombre_equipo VARCHAR(50) NOT NULL,
+    marca VARCHAR(50) NOT NULL,
+    modelo VARCHAR(50) NOT NULL,
+    estado VARCHAR(60) NOT NULL,
+    descripcion VARCHAR(80) NOT NULL,
+    numero_inventario INT NOT NULL,
+
+    CONSTRAINT fk_tipo_equipo
+        FOREIGN KEY (ID_tipo_equipo)
+        REFERENCES tipo_equipo(ID_tipo_equipo)
+);
+CREATE TABLE reservas (
+    ID_reserva SERIAL PRIMARY KEY,
+    ID_usuario INT NOT NULL,
+    ID_laboratorio INT NOT NULL,
+    hora_inicio TIMESTAMP NOT NULL,
+    hora_fin TIMESTAMP NOT NULL,
+    estado VARCHAR(30) NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_reserva_usuario
+        FOREIGN KEY (ID_usuario)
+        REFERENCES usuarios(ID_usuario),
+
+    CONSTRAINT fk_reserva_laboratorio
+        FOREIGN KEY (ID_laboratorio)
+        REFERENCES laboratorios(ID_laboratorio)
+);
+
+CREATE TABLE detalle_reserva (
+    ID_detalle_reserva SERIAL PRIMARY KEY,
+    ID_reserva INT NOT NULL,
+    ID_equipo INT NOT NULL,
+    estado VARCHAR(30) NOT NULL,
+
+    CONSTRAINT fk_detalle_reserva
+        FOREIGN KEY (ID_reserva)
+        REFERENCES reservas(ID_reserva),
+
+    CONSTRAINT fk_detalle_equipo
+        FOREIGN KEY (ID_equipo)
+        REFERENCES equipos(ID_equipo),
+
+    CONSTRAINT uq_reserva_equipo
+        UNIQUE (ID_reserva, ID_equipo)
+);
+
+CREATE TABLE uso_equipos (
+    ID_uso SERIAL PRIMARY KEY,
+    ID_detalle_reserva INT NOT NULL,
+    hora_recogida TIMESTAMP,
+    hora_devolucion TIMESTAMP,
+    hora_devolucion_real TIMESTAMP,
+    estado_uso VARCHAR(30),
+
+    CONSTRAINT fk_uso_detalle
+        FOREIGN KEY (ID_detalle_reserva)
+        REFERENCES detalle_reserva(ID_detalle_reserva)
+);
+
+CREATE TABLE cola_espera (
+    ID_cola SERIAL PRIMARY KEY,
+    ID_detalle_reserva INT NOT NULL,
+    fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    posicion INT NOT NULL,
+    estado VARCHAR(30) NOT NULL,
+
+    CONSTRAINT fk_cola_detalle
+        FOREIGN KEY (ID_detalle_reserva)
+        REFERENCES detalle_reserva(ID_detalle_reserva)
+);
+
+CREATE TABLE mantenimientos (
+    ID_mantenimiento SERIAL PRIMARY KEY,
+    ID_equipo INT NOT NULL,
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE,
+    tipo VARCHAR(50),
+    descripcion VARCHAR(300),
+    estado VARCHAR(30) NOT NULL,
+
+    CONSTRAINT fk_mantenimiento_equipo
+        FOREIGN KEY (ID_equipo)
+        REFERENCES equipos(ID_equipo)
+);
+
+posible mejora---------
+
+-- 1. Crear un ENUM para congelar los estados permitidos
+CREATE TYPE estado_equipo AS ENUM ('DISPONIBLE', 'EN_USO', 'MANTENIMIENTO', 'DE_BAJA');
+
+
+
+-- 3. Crear una tabla de auditoría 
+CREATE TABLE auditoria_inventario (
+    ID_auditoria SERIAL PRIMARY KEY,
+    ID_usuario INT NOT NULL,
+    tabla_afectada VARCHAR(50) NOT NULL,
+    accion VARCHAR(20) NOT NULL, -- 'INSERT', 'UPDATE', 'DELETE'
+    descripcion TEXT,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+{
+  "nombre": "Laura",
+  "apellido": "Gómez",
+  "correo": "laura.gomez@email.com",
+  "password_usuario": "clave456",
+  "rol": "ESTUDIANTE"
+}
+
+{
+  "id_usuario": 1,
+  "id_laboratorio": 1,
+  "hora_inicio": "2026-09-20 08:00:00",
+  "hora_fin": "2026-09-20 10:00:00",
+  "equipos": [1, 2]
+}
+
+SELECT 
+    r.id_reserva,
+    r.estado AS estado_reserva,
+    e.id_equipo,
+    e.nombre_equipo,
+    dr.estado AS estado_detalle
+FROM reservas r
+JOIN detalle_reserva dr ON r.id_reserva = dr.id_reserva
+JOIN equipos e ON dr.id_equipo = e.id_equipo
+ORDER BY r.id_reserva DESC;

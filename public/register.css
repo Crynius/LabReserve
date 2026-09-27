@@ -1,0 +1,29 @@
+
+.grid-formulario {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.grid-formulario .grupo-input {
+    flex: 1;
+}
+
+
+.col2 form .grupo-input {
+    margin-bottom: 22px;
+}
+
+
+@media (max-width: 768px) {
+   
+    .grid-formulario {
+        flex-direction: column;
+        gap: 0; 
+    }
+    
+    .col2 form .grupo-input {
+        margin-bottom: 18px;
+    }
+}
+
