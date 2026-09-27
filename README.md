@@ -30,13 +30,7 @@ Sistema web completo para la **automatización, control de inventario, colas de 
 
 </div>
 
-**Distribución del código:**
 
-```
-JavaScript ████████████████████░░░░░░░░░░░░░░  58.1%
-CSS        ██████████░░░░░░░░░░░░░░░░░░░░░░░░  24.4%
-HTML       ███████░░░░░░░░░░░░░░░░░░░░░░░░░░░  17.5%
-```
 
 ---
 
