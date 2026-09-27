@@ -1,4 +1,4 @@
-# 🛠️ LabReserve — Sistema de Gestión y Reserva de Equipos de Laboratorio
+#  LabReserve — Sistema de Gestión y Reserva de Equipos de Laboratorio
 
 <div align="center">
 
@@ -17,16 +17,16 @@ Sistema web completo para la **automatización, control de inventario, colas de 
 
 ---
 
-## 📊 Stack del proyecto
+##  Stack del proyecto
 
 <div align="center">
 
 | Capa | Tecnología |
 |---|---|
-| 🖥️ **Frontend** | HTML5 · CSS3 (Glassmorphism) · JavaScript ES6+ (Fetch API, Async/Await) |
-| ⚙️ **Backend** | Node.js · Express.js |
-| 🗄️ **Base de datos** | PostgreSQL |
-| 🔧 **Herramientas** | Nodemon · Git · VS Code |
+|  **Frontend** | HTML5 · CSS3 (Glassmorphism) · JavaScript ES6+ (Fetch API, Async/Await) |
+|  **Backend** | Node.js · Express.js |
+|  **Base de datos** | PostgreSQL |
+|  **Herramientas** | Nodemon · Git · VS Code |
 
 </div>
 
@@ -34,26 +34,26 @@ Sistema web completo para la **automatización, control de inventario, colas de 
 
 ---
 
-## ✨ Características principales
+##  Características principales
 
-### 👤 Portal Estudiantil — `/reservas.html`
-- 🔍 **Catálogo por categorías**: exploración dinámica y búsqueda interactiva de equipos.
-- ⏱️ **Control de reservas**: préstamos con regla de negocio de máximo **2 horas continuas**.
-- 🚦 **Gestión de colas**: sistema automatizado de espera para equipos en uso.
-- 📜 **Historial dinámico**: consulta en tiempo real de préstamos activos y devoluciones.
+###  Portal Estudiantil — `/reservas.html`
+-  **Catálogo por categorías**: exploración dinámica y búsqueda interactiva de equipos.
+-  **Control de reservas**: préstamos con regla de negocio de máximo **2 horas continuas**.
+-  **Gestión de colas**: sistema automatizado de espera para equipos en uso.
+-  **Historial dinámico**: consulta en tiempo real de préstamos activos y devoluciones.
 
-### 🛡️ Panel de Administración — `/admin-panel.html`
-- 📦 **Gestión de inventario**: CRUD completo sobre productos y equipos.
-- 🔧 **Mantenimiento y estado**: monitoreo global de disponibilidad y condición física.
-- 📈 **Métricas de uso**: registro de tiempos y usuarios activos en el laboratorio.
+###  Panel de Administración — `/admin-panel.html`
+-  **Gestión de inventario**: CRUD completo sobre productos y equipos.
+-  **Mantenimiento y estado**: monitoreo global de disponibilidad y condición física.
+-  **Métricas de uso**: registro de tiempos y usuarios activos en el laboratorio.
 
-### 🔐 Autenticación — `/login.html`, `/register.html`
-- 🔑 Acceso seguro con validación de usuarios y persistencia de rol en frontend.
-- 📝 Registro de nuevos usuarios estudiantes.
+###  Autenticación — `/login.html`, `/register.html`
+-  Acceso seguro con validación de usuarios y persistencia de rol en frontend.
+-  Registro de nuevos usuarios estudiantes.
 
 ---
 
-## 🧭 Flujo de la aplicación
+##  Flujo de la aplicación
 
 ```mermaid
 flowchart LR
@@ -75,7 +75,7 @@ flowchart LR
 
 ---
 
-## 🏗️ Arquitectura del proyecto
+##  Arquitectura del proyecto
 
 ```text
 LabReserve/
@@ -124,7 +124,7 @@ LabReserve/
 
 ---
 
-## ⚙️ Instalación y configuración local
+##  Instalación y configuración local
 
 ### 1. Requisitos previos
 - [Node.js](https://nodejs.org/) v16 o superior
@@ -160,7 +160,7 @@ La aplicación quedará disponible en `http://localhost:3000` (o el puerto que d
 
 ---
 
-## 🗺️ Roadmap
+##  Roadmap
 
 - [ ] Notificaciones automáticas al liberarse un equipo en cola
 - [ ] Dashboard de estadísticas de uso por categoría
@@ -169,14 +169,14 @@ La aplicación quedará disponible en `http://localhost:3000` (o el puerto que d
 
 ---
 
-## 🤝 Contribuciones
+##  Contribuciones
 
-Este es un proyecto académico/personal en desarrollo activo. Si quieres sugerir mejoras, siéntete libre de abrir un *issue* o un *pull request*.
+Este es un proyecto académico/personal en desarrollo activo. 
 
 ---
 
 <div align="center">
 
-Hecho con ☕ y muchas horas de laboratorio.
+
 
 </div>
